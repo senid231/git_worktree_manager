@@ -1,0 +1,15 @@
+# .worktreeinclude — gitignored files to copy into each new worktree.
+# Docs: https://github.com/senid231/git_worktree_manager
+#
+# Uses gitignore syntax. Only files that match a pattern *and* are ignored by Git
+# are copied; tracked files are already checked out by `git worktree add`.
+# Entries here are added to the `copy` list in .gwt/config.yml.
+#
+# A personal, gitignored .worktreeinclude.local is read after this file, so it can
+# add patterns of its own or negate ones listed here.
+
+#.env
+#.env.local
+#!.env.production
+#.vscode/settings.json
+#certs/local/**

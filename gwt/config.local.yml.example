@@ -1,0 +1,25 @@
+# GWT personal config — overrides .gwt/config.yml for you only. Do not commit.
+# Docs: https://github.com/senid231/git_worktree_manager
+#
+# Merge rules against .gwt/config.yml:
+#   lists (copy, link, skip_copy, skip_link, on_create, on_remove) are concatenated
+#   scalars (worktrees_root) are overridden
+#   the commands map is deep-merged
+
+#worktrees_root: .worktrees
+
+# Files/dirs to copy into each worktree (added to the shared `copy` list)
+# Tip: `.worktreeinclude.local` at the repo root (gitignore syntax, gitignored) is the
+# personal counterpart to `.worktreeinclude` — use it to list gitignored files to copy
+# into each new worktree without touching the shared file.
+#copy:
+#  - .env.local
+
+#link:
+#  - node_modules
+
+#on_create:
+#  - echo "Personal hook for $GWT_BRANCH"
+
+#commands:
+#  console: bin/rails console

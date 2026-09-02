@@ -1,0 +1,52 @@
+# GWT (Git Worktree Manager) configuration
+# Docs: https://github.com/senid231/git_worktree_manager
+# Install via: pipx install git+https://github.com/senid231/git_worktree_manager.git
+# Upgrade via: pipx upgrade gwt
+#
+# This is the shared config — commit it. Personal overrides go in
+# .gwt/config.local.yml (gitignored): lists are concatenated onto the ones here,
+# scalars override them, and the commands map is deep-merged.
+
+# Root directory for worktrees, relative to repo root
+worktrees_root: .worktrees
+
+# Files/dirs to copy into each worktree (supports globs like config/*.yml)
+# Tip: `.worktreeinclude` (shared, commit it) and `.worktreeinclude.local` (personal,
+# gitignored) at the repo root use gitignore syntax to list gitignored files to copy
+# into each new worktree, on top of this list.
+copy: []
+#  - .env
+#  - config/*.yml
+
+# Files/dirs to skip during copy (supports globs)
+skip_copy: []
+
+# Files/dirs to symlink into each worktree (supports globs)
+link: []
+#  - node_modules
+#  - vendor/bundle
+
+# Files/dirs to skip during link (supports globs)
+skip_link: []
+
+# Shell commands to run after creating a worktree
+# Available env vars: GWT_BRANCH, GWT_WT_SLUG, GWT_WT_PATH, GWT_WT_REL_PATH, GWT_REPO_PATH
+# GWT_WT_SLUG is the branch name with '/' and '-' replaced by '_' (safe for db names / identifiers)
+on_create: []
+#  - echo "Worktree created for $GWT_BRANCH"
+#  - createdb "myapp_${GWT_WT_SLUG}"
+
+# Shell commands to run before removing a worktree
+on_remove: []
+#  - echo "Removing worktree for $GWT_BRANCH"
+#  - dropdb --if-exists "myapp_${GWT_WT_SLUG}"
+
+# Named commands to run on demand via 'gwt run <name>'
+# Commands run inside the worktree directory with GWT env vars available.
+# Pass extra arguments after '--': gwt run <name> -- arg1 arg2
+# Access args in commands: $1, $2, ... for individual args
+#   $@ for all args, ${@:2} for all args starting from 2nd
+commands: {}
+#  setup: bundle install && yarn install
+#  console: bin/rails console
+#  edit: cd $1 && $EDITOR ${@:2}

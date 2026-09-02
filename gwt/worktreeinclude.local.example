@@ -1,0 +1,6 @@
+# .worktreeinclude.local — your personal gitignored files to copy into each new
+# worktree. Read after .worktreeinclude, so it can add patterns or negate them.
+# Do not commit. Docs: https://github.com/senid231/git_worktree_manager
+
+#.env.local
+#.vscode/settings.json

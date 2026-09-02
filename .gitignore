@@ -1,0 +1,24 @@
+# Python build and env
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.ruff_cache/
+
+# Type checking
+.mypy_cache/
+
+# Editors
+.idea/
+
+# AI
+.claude/settings.local.json
+
+# GWT
+.gwt/config.local.yml
+.worktreeinclude.local
+.worktrees/

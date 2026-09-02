@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gwt"
+version = "1.0.0"
+description = "Git Worktree Manager — automated file syncing, hooks, and commands for git worktrees"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Denis Talakevich", email = "senid231@gmail.com"}]
+keywords = ["git", "worktree", "cli", "developer-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Version Control :: Git",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "click>=8.0",
+    "pyyaml>=6.0",
+    "gitpython>=3.1.0",
+    "questionary>=2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/senid231/git_worktree_manager"
+Repository = "https://github.com/senid231/git_worktree_manager"
+Changelog = "https://github.com/senid231/git_worktree_manager/blob/master/CHANGELOG.md"
+Issues = "https://github.com/senid231/git_worktree_manager/issues"
+
+[project.scripts]
+gwt = "gwt.cli:app"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10",
+    "types-PyYAML",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gwt*"]
+
+[tool.setuptools.package-data]
+gwt = ["*.example"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
