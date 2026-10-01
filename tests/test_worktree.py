@@ -171,6 +171,20 @@ class TestAddWorktree:
         with pytest.raises(ValueError):
             add_worktree(config, tmp_git_repo, "test-branch", force_sync=False)
 
+    def test_add_branch_checked_out_elsewhere_raises(self, tmp_git_repo: Path) -> None:
+        repo = Repo(tmp_git_repo)
+        repo.create_head("test-branch")
+        other_path = tmp_git_repo / "elsewhere"
+        repo.git.worktree("add", str(other_path), "test-branch")
+        config = GwtConfig(worktrees_root=".worktrees")
+        with pytest.raises(ValueError, match=r"already checked out in worktree at .*elsewhere"):
+            add_worktree(config, tmp_git_repo, "test-branch", force_sync=False)
+
+    def test_add_git_failure_raises_value_error(self, tmp_git_repo: Path) -> None:
+        config = GwtConfig(worktrees_root=".worktrees")
+        with pytest.raises(ValueError, match="git worktree add failed: fatal:"):
+            add_worktree(config, tmp_git_repo, "bad..name", force_sync=False)
+
     def test_add_with_slash_in_branch_name(self, tmp_git_repo: Path) -> None:
         repo = Repo(tmp_git_repo)
         repo.create_head("feature/auth")

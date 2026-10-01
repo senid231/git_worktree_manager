@@ -135,6 +135,19 @@ class TestAdd:
         assert result.exit_code != 0
         assert "repo root" in result.output.lower()
 
+    def test_add_branch_checked_out_elsewhere_errors(
+        self, tmp_git_repo: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.chdir(tmp_git_repo)
+        write_config(tmp_git_repo, {"worktrees_root": ".worktrees"})
+        repo = Repo(tmp_git_repo)
+        repo.create_head("test-branch")
+        repo.git.worktree("add", str(tmp_git_repo / "elsewhere"), "test-branch")
+        result = runner.invoke(app, ["add", "test-branch"])
+        assert result.exit_code == 1
+        assert "already checked out in worktree at" in result.output
+        assert result.exception is None or isinstance(result.exception, SystemExit)
+
     def test_add_without_config_warns_and_uses_default_root(
         self, tmp_git_repo: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
