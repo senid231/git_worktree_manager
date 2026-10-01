@@ -5,7 +5,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from git import Repo
+from git import GitCommandError, Repo
 
 from gwt.config import GwtConfig
 from gwt.sync import sync_files
@@ -101,6 +101,13 @@ def _branch_exists(repo: Repo, branch: str) -> bool:
     return False
 
 
+def _git_error_message(e: GitCommandError) -> str:
+    """Return git's own error lines, without GitPython's command dump."""
+    stderr = str(e.stderr).strip().removeprefix("stderr: '").removesuffix("'")
+    fatal = [line for line in stderr.splitlines() if line.startswith(("fatal:", "error:"))]
+    return " ".join(fatal) or stderr or str(e)
+
+
 def add_worktree(
     config: GwtConfig,
     repo_root: Path,
@@ -114,10 +121,17 @@ def add_worktree(
     if wt_path.exists():
         raise ValueError(f"Worktree directory already exists: {wt_path}")
 
-    if _branch_exists(repo, branch):
-        repo.git.worktree("add", str(wt_path), branch)
-    else:
-        repo.git.worktree("add", "-b", branch, str(wt_path))
+    existing = find_worktree_by_branch(repo_root, branch)
+    if existing is not None:
+        raise ValueError(f"Branch '{branch}' is already checked out in worktree at {existing.path}")
+
+    try:
+        if _branch_exists(repo, branch):
+            repo.git.worktree("add", str(wt_path), branch)
+        else:
+            repo.git.worktree("add", "-b", branch, str(wt_path))
+    except GitCommandError as e:
+        raise ValueError(f"git worktree add failed: {_git_error_message(e)}") from e
     sync_files(config, repo_root, wt_path, force=force_sync)
 
     return wt_path
